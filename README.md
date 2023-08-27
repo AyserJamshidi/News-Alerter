@@ -1,1 +1,1 @@
-# ElectroNews-Alerter
+# News-Alerter
