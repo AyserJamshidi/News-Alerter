@@ -1,0 +1,15 @@
+{
+	"websites": [
+		{
+			"name": "Electrek",
+			"url": "electrek.co",
+			"refreshInterval": 20000,
+			"primaryContainer": "list-wrap",
+			"desiredElement": "item-cell",
+			"blacklistElements": [
+				"txt-ads-box",
+				"txt-ads-box-2"
+			]
+		}
+	]
+}
