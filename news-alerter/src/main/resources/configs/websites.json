@@ -1,15 +1,25 @@
 {
+	"headless": false,
 	"websites": [
 		{
 			"name": "Electrek",
-			"url": "electrek.co",
-			"refreshInterval": 20000,
-			"primaryContainer": "list-wrap",
-			"desiredElement": "item-cell",
-			"blacklistElements": [
-				"txt-ads-box",
-				"txt-ads-box-2"
-			]
+			"url": "https://electrek.co/",
+			"refreshInterval": 60000,
+			"containerElement": "river__posts",
+			"entryElement": "article",
+			"cssSelector": ".article__title-link",
+			"outputTitleUrl": true,
+			"blacklistElements": null
+		},
+		{
+			"name": "InsideEVs",
+			"url": "https://insideevs.com/news/",
+			"refreshInterval": 60000,
+			"containerElement": "browse-grid",
+			"entryElement": "wcom",
+			"cssSelector": ".text-box h3 a",
+			"outputTitleUrl": true,
+			"blacklistElements": null
 		}
 	]
 }
