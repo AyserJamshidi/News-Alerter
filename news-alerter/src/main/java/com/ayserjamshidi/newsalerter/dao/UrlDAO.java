@@ -22,34 +22,34 @@ public class UrlDAO {
     //
     private static final Logger LOG = LoggerFactory.getLogger(UrlDAO.class);
     private static final boolean DEBUG = LOG.isDebugEnabled();
-    private final File newsAlerterFilePath;
-    private final NewsAlerterDatabaseConfig newsAlerterDatabaseConfig;
-    private final Set<String> newsAlerterUrls;
+//    private final File newsAlerterFilePath;
+//    private final NewsAlerterDatabaseConfig newsAlerterDatabaseConfig;
+//    private final Set<String> newsAlerterUrls;
 
     @Autowired
     public UrlDAO(ObjectMapper objectMapper) throws URISyntaxException, IOException {
         this.objectMapper = objectMapper;
 
-        newsAlerterFilePath = DEBUG ? new ClassPathResource("./configs/websites.json").getFile()
-                : new File(new URI("file:configs/websites.json"));
+//        newsAlerterFilePath = DEBUG ? new ClassPathResource("./configs/websites.json").getFile()
+//                : new File(new URI("file:configs/websites.json"));
 
-        newsAlerterDatabaseConfig = objectMapper.readValue(newsAlerterFilePath, NewsAlerterDatabaseConfig.class);
-        newsAlerterUrls = newsAlerterDatabaseConfig.getUrls();
+//        newsAlerterDatabaseConfig = objectMapper.readValue(newsAlerterFilePath, NewsAlerterDatabaseConfig.class);
+//        newsAlerterUrls = newsAlerterDatabaseConfig.getUrls();
     }
 
-    public void addNews(String url) {
-        newsAlerterUrls.add(url);
+//    public void addNews(String url) {
+//        newsAlerterUrls.add(url);
+//
+//        try {
+//            objectMapper.writeValue(newsAlerterFilePath, newsAlerterUrls);
+//        } catch (IOException e) {
+//            LOG.error("An exception occurred while saving to the NewsDAOImpl config file", e);
+//        }
+//    }
 
-        try {
-            objectMapper.writeValue(newsAlerterFilePath, newsAlerterUrls);
-        } catch (IOException e) {
-            LOG.error("An exception occurred while saving to the NewsDAOImpl config file", e);
-        }
-    }
-
-    public Set<String> getNews() {
-        return newsAlerterUrls;
-    }
+//    public Set<String> getNews() {
+//        return newsAlerterUrls;
+//    }
 
     public void updateNews() {
 

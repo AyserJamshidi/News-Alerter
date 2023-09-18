@@ -1,7 +1,7 @@
 package com.ayserjamshidi;
 
 import com.ayserjamshidi.newsalerter.WebsiteEntry;
-import com.ayserjamshidi.newsalerter.factory.SimpleWebSearchFactory;
+//import com.ayserjamshidi.newsalerter.factory.SimpleWebSearchFactory;
 import com.ayserjamshidi.newsalerter.model.NewsAlerterConfig;
 import com.ayserjamshidi.newsalerter.model.SimpleWebSearch;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,10 +57,10 @@ public class AppExecutor {
      */
     private static void execute(Boolean headless, WebsiteEntry[] websiteEntries) {
         for (WebsiteEntry websiteEntry : websiteEntries) {
-            SimpleWebSearch testy = SimpleWebSearchFactory.createSimpleWebSearch(websiteEntry);
-
-            testy.initialize(headless);
-            testy.start();
+//            SimpleWebSearch testy = SimpleWebSearchFactory.createSimpleWebSearch(websiteEntry);
+//
+//            testy.initialize(headless);
+//            testy.start();
         }
     }
 }

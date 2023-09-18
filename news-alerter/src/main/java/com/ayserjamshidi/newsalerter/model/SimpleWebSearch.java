@@ -30,24 +30,26 @@ import java.util.List;
 public class SimpleWebSearch extends Thread implements WebSearch {
 
     private static final Logger LOG = LoggerFactory.getLogger(SimpleWebSearch.class);
-    private NewsSvc newsSvc;
 
     private WebDriver driver;
     WebsiteEntry websiteEntry;
     FirefoxOptions options;
     WebDriverWait wait;
 
+    private NewsSvc newsSvc;
+
     public SimpleWebSearch() {
         this.setDaemon(false);
         this.setName(this.getClass().getSimpleName());
     }
 
-    public SimpleWebSearch(WebsiteEntry websiteEntry, NewsSvc newsSvc) {
+    @Autowired
+    public SimpleWebSearch(NewsSvc newsSvc) {
         this.setDaemon(false);
-        this.setName(websiteEntry.getName());
 
-        this.websiteEntry = websiteEntry;
         this.newsSvc = newsSvc;
+        System.out.println(this.newsSvc);
+        System.out.println(this.newsSvc.contains(""));
     }
 
     /**

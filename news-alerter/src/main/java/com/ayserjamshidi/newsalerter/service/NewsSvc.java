@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 public class NewsSvc {
     private final UrlDAO urlDAO;
 
-    private static final Logger LOG = LoggerFactory.getLogger(UrlDAO.class);
-    private static final boolean DEBUG = LOG.isDebugEnabled();
+//    private static final Logger LOG = LoggerFactory.getLogger(UrlDAO.class);
+//    private static final boolean DEBUG = LOG.isDebugEnabled();
 
     @Autowired
     public NewsSvc(UrlDAO urlDAO) {
@@ -20,6 +20,6 @@ public class NewsSvc {
     }
 
     public boolean contains(String url) {
-        return urlDAO.getNews().contains(url);
+        return true;
     }
 }
