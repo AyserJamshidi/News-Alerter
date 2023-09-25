@@ -90,11 +90,11 @@
         <!-- LOG4J2 -->
         <!--        -->
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.logging.log4j</groupId>-->
-<!--            <artifactId>log4j-slf4j2-impl</artifactId>-->
-<!--            <version>${log4j.version}</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
         <dependency>
@@ -147,25 +147,11 @@
             <version>3.1.3</version>
             <exclusions>
                 <!-- We prefer log4j2 instead of logback -->
-<!--                <exclusion>-->
-<!--                    <groupId>org.springframework.boot</groupId>-->
-<!--                    <artifactId>spring-boot-starter-logging</artifactId>-->
-<!--                </exclusion>-->
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
-
-        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework/spring-core &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework</groupId>-->
-<!--            <artifactId>spring-core</artifactId>-->
-<!--            <version>${spring.version}</version>-->
-<!--        </dependency>-->
-
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework/spring-context &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework</groupId>-->
-<!--            <artifactId>spring-context</artifactId>-->
-<!--            <version>${spring.version}</version>-->
-<!--        </dependency>-->
     </dependencies>
 </project>

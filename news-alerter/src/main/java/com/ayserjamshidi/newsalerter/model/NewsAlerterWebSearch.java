@@ -70,7 +70,7 @@ public class NewsAlerterWebSearch extends SimpleWebSearch {
                     continue;
                 }
 
-                outputString.add(newsUrl);
+                outputString.add(newsUrl + ' ');
                 addedUrls.add(newsUrl);
 
                 LOG.info("{}", outputString);

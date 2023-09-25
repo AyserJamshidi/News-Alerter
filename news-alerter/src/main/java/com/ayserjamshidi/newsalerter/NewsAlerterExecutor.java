@@ -55,7 +55,7 @@ public class NewsAlerterExecutor {
     private NewsAlerterConfig loadConfig() throws URISyntaxException, IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         NewsAlerterConfig newsAlerterConfig = null;
-        File configFile = FileUtil.getFile("websites.json");
+        File configFile = FileUtil.getConfigFile("websites.json");
 
         if (configFile == null) {
             return null;

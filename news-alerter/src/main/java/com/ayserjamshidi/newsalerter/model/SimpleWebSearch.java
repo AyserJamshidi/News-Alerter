@@ -80,9 +80,7 @@ public abstract class SimpleWebSearch extends Thread implements WebSearch {
         }
 
         while (!this.isInterrupted()) {
-//            LOG.info("{} reloading...", this.getName());
-
-            LOG.debug("Website: {}", websiteUrl);
+            LOG.info("Reloading '{}'", this.getName());
             driver.get(websiteUrl);
 
             try {
