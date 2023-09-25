@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: news-alerter
+
+logging:
+  level:
+    root: info
+    com.ayserjamshidi: debug
+    org:
+      springframework:
+        boot:
+          autoconfigure:
+            logging: info

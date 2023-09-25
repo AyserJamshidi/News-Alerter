@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
+    <Properties>
+        <Property name="file_name">${bundle:application-${sys:spring.profiles.active}:log.file.name}</Property>
+    </Properties>
     <Appenders>
         <Console name="stdout" target="SYSTEM_OUT">
             <PatternLayout>

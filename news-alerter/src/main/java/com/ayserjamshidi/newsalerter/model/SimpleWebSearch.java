@@ -1,8 +1,6 @@
 package com.ayserjamshidi.newsalerter.model;
 
-import com.ayserjamshidi.newsalerter.service.NewsSvc;
 import com.ayserjamshidi.template.WebSearch;
-import com.ayserjamshidi.newsalerter.WebsiteEntry;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -15,39 +13,31 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
  */
 @Component
-public class SimpleWebSearch extends Thread implements WebSearch {
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE) // Required to create a new instance when this bean is requested
+public abstract class SimpleWebSearch extends Thread implements WebSearch {
 
     private static final Logger LOG = LoggerFactory.getLogger(SimpleWebSearch.class);
-    private NewsSvc newsSvc;
 
-    private WebDriver driver;
-    WebsiteEntry websiteEntry;
-    FirefoxOptions options;
-    WebDriverWait wait;
+    protected WebDriver driver;
+//    protected EdgeOptions options;
+    protected FirefoxOptions options;
+    protected String websiteUrl;
+    protected int refreshInterval;
+    protected WebDriverWait wait;
 
     public SimpleWebSearch() {
         this.setDaemon(false);
         this.setName(this.getClass().getSimpleName());
-    }
-
-    public SimpleWebSearch(WebsiteEntry websiteEntry, NewsSvc newsSvc) {
-        this.setDaemon(false);
-        this.setName(websiteEntry.getName());
-
-        this.websiteEntry = websiteEntry;
-        this.newsSvc = newsSvc;
     }
 
     /**
@@ -65,26 +55,35 @@ public class SimpleWebSearch extends Thread implements WebSearch {
      */
     @Override
     public void initialize(Boolean performanceMode) {
-        if (!performanceMode) {
-            driver = WebDriverManager.firefoxdriver().create();
-        } else {
-            options = new FirefoxOptions();
+//        options = new EdgeOptions();
+        options = new FirefoxOptions();
+
+        if (performanceMode) {
+//            options.addArguments("headless");
+//            options.addArguments("disablegpu");
+
+
+            // Firefox
             options.addArguments("--headless");
             options.addPreference("browser.tabs.remote.autostart", false);
             options.setLogLevel(FirefoxDriverLogLevel.ERROR);
-
-            driver = WebDriverManager.firefoxdriver().capabilities(options).create();
         }
 
+        driver = WebDriverManager.firefoxdriver().capabilities(options).create();
         wait = new WebDriverWait(driver, Duration.ofSeconds(30));
     }
 
     @Override
     public void run() {
-        while (!this.isInterrupted()) {
-            LOG.debug("{} reloading...", this.getName());
+        if (websiteUrl.isEmpty()) {
+            LOG.error("Website URL is not set or was empty!");
+        }
 
-            driver.get(websiteEntry.getUrl());
+        while (!this.isInterrupted()) {
+//            LOG.info("{} reloading...", this.getName());
+
+            LOG.debug("Website: {}", websiteUrl);
+            driver.get(websiteUrl);
 
             try {
                 wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete';"));
@@ -93,39 +92,16 @@ public class SimpleWebSearch extends Thread implements WebSearch {
                 continue;
             }
 
-            for (WebElement webElement : driver.findElements(By.className(websiteEntry.getContainerElement()))) {
+            stepsInBetween();
 
-                for (WebElement currentItem : webElement.findElements(By.className(websiteEntry.getEntryElement()))) {
-                    List<String> outputString = new ArrayList<>();
-
-                    WebElement titleElement = findElementOrNull(currentItem, By.cssSelector(websiteEntry.getCssSelector()));
-
-                    if (titleElement == null) {
-                        LOG.warn("Element not found: {}", websiteEntry.getCssSelector());
-                        continue;
-                    }
-
-                    String outputHref = titleElement.getAttribute("href");
-                    outputString.add(titleElement.getText());
-
-                    if (outputHref.isEmpty())
-                        continue;
-
-                    if (newsSvc.contains(outputHref)) {
-                        LOG.info("Already contain {}", outputHref);
-                        continue;
-                    }
-
-                    outputString.add(outputHref);
-
-                    LOG.info("{}", outputString);
-                }
-            }
-
-            sleepNoException(websiteEntry.getRefreshInterval());
+            sleepNoException(refreshInterval);
         }
 
         driver.quit();
+    }
+
+    protected void stepsInBetween() {
+
     }
 
     protected void outputEntry() {

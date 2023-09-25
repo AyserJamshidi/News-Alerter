@@ -1,4 +1,4 @@
-package com.ayserjamshidi.newsalerter.model;
+package com.ayserjamshidi.newsalerter.model.jackson;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
