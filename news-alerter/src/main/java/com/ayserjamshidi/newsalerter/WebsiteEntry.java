@@ -1,5 +1,6 @@
 package com.ayserjamshidi.newsalerter;
 
+import com.ayserjamshidi.newsalerter.model.jackson.NewsElementDetails;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -26,21 +27,23 @@ public class WebsiteEntry {
     String url;
 
     @JsonProperty("refreshInterval")
-    int refreshInterval;
+    @NonNull
+    Integer refreshInterval;
 
     @JsonProperty("containerElement")
     @NonNull
-    String containerElement;
+    NewsElementDetails containerElement;
 
-    @JsonProperty("entryElement")
+    @JsonProperty("singlePostElement")
     @NonNull
-    String entryElement;
+    NewsElementDetails singlePostElement;
 
-    @JsonProperty("cssSelector")
-    String cssSelector;
+    @JsonProperty("urlElement")
+    @NonNull
+    NewsElementDetails urlElement;
 
-    @JsonProperty("outputTitleUrl")
-    Boolean outputTitleUrl;
+    @JsonProperty("titleElement")
+    NewsElementDetails titleElement;
 
     @JsonProperty("blacklistElements")
     String[] blacklistElements;

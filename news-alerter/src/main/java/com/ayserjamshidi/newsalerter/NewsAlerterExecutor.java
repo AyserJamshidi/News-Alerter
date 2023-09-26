@@ -31,7 +31,7 @@ public class NewsAlerterExecutor {
     }
 
     public void start(String[] args) {
-        LOG.info("DEBUG == {}", DEBUG);
+        LOG.debug("DEBUG == {}", DEBUG);
 
         NewsAlerterConfig newsAlerterConfig;
         try {
@@ -46,7 +46,7 @@ public class NewsAlerterExecutor {
             return;
         }
 
-        execute(newsAlerterConfig.getHeadless(), newsAlerterConfig.getWebsiteEntries());
+        execute(newsAlerterConfig);
     }
 
     /**
@@ -55,7 +55,7 @@ public class NewsAlerterExecutor {
     private NewsAlerterConfig loadConfig() throws URISyntaxException, IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         NewsAlerterConfig newsAlerterConfig = null;
-        File configFile = FileUtil.getFile("websites.json");
+        File configFile = FileUtil.getConfigFile("websites.json");
 
         if (configFile == null) {
             return null;
@@ -74,18 +74,14 @@ public class NewsAlerterExecutor {
     /**
      * Executes a unique thread for each {@link WebsiteEntry} in an array of website entries.
      *
-     * @param websiteEntries an array of {@link WebsiteEntry} representing the websites to be executed
+     * @param newsAlerterConfig A {@link NewsAlerterConfig} containing website entries
      */
-    private void execute(Boolean headless, WebsiteEntry[] websiteEntries) {
-        for (WebsiteEntry websiteEntry : websiteEntries) {
-            NewsAlerterWebSearch curWebSearch = test();
+    private void execute(NewsAlerterConfig newsAlerterConfig) {
+        for (WebsiteEntry websiteEntry : newsAlerterConfig.getWebsiteEntries()) {
+            NewsAlerterWebSearch curWebSearch = context.getBean(NewsAlerterWebSearch.class);
 
-            curWebSearch.initialize(websiteEntry, headless);
+            curWebSearch.initialize(websiteEntry, newsAlerterConfig.getIgnoreFirstRunOutput(), newsAlerterConfig.getHeadless());
             curWebSearch.start();
         }
-    }
-
-    private NewsAlerterWebSearch test() {
-        return context.getBean(NewsAlerterWebSearch.class);
     }
 }

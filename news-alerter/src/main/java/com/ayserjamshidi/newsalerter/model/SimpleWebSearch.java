@@ -59,9 +59,9 @@ public abstract class SimpleWebSearch extends Thread implements WebSearch {
         options = new FirefoxOptions();
 
         if (performanceMode) {
+            // Edge
 //            options.addArguments("headless");
 //            options.addArguments("disablegpu");
-
 
             // Firefox
             options.addArguments("--headless");
@@ -69,6 +69,7 @@ public abstract class SimpleWebSearch extends Thread implements WebSearch {
             options.setLogLevel(FirefoxDriverLogLevel.ERROR);
         }
 
+//        driver = WebDriverManager.edgedriver().capabilities(options).create();
         driver = WebDriverManager.firefoxdriver().capabilities(options).create();
         wait = new WebDriverWait(driver, Duration.ofSeconds(30));
     }
@@ -80,9 +81,7 @@ public abstract class SimpleWebSearch extends Thread implements WebSearch {
         }
 
         while (!this.isInterrupted()) {
-//            LOG.info("{} reloading...", this.getName());
-
-            LOG.debug("Website: {}", websiteUrl);
+            LOG.info("Reloading '{}'", this.getName());
             driver.get(websiteUrl);
 
             try {
@@ -110,11 +109,11 @@ public abstract class SimpleWebSearch extends Thread implements WebSearch {
 
     protected <E> WebElement findElementOrNull(E object, By by) {
         try {
-            if (object instanceof WebElement)
+            if (object instanceof WebElement) {
                 return ((WebElement) object).findElement(by);
-            else if (object instanceof WebDriver)
+            } else if (object instanceof WebDriver) {
                 return ((WebDriver) object).findElement(by);
-            else {
+            } else {
                 LOG.warn("We are searching with an object we don't know about!");
                 return null;
             }

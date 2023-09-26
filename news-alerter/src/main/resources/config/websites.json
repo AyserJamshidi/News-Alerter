@@ -1,0 +1,60 @@
+{
+	"headless": true,
+	"ignoreFirstRunOutput": false,
+	"website_documentation": [
+		{
+			"name_REQUIRED": "Name of the website",
+			"url_REQUIRED": "URL of the website",
+			"refreshInterval_REQUIRED": "Refresh interval in milliseconds (seconds * 1000)",
+			"spacer": " ",
+			"element_performance_priority": [
+				"id",
+				"name",
+				"linkText",
+				"partialLinkText",
+				"tagName",
+				"className",
+				"cssSelector",
+				"xpath"
+			],
+			"containerElement_REQUIRED": {
+				"searchBy": "className",
+				"searchTerms": "river__posts"
+			},
+			"singlePostElement_REQUIRED": {
+				"searchBy": "className",
+				"searchTerms": "article"
+			},
+			"urlElement_REQUIRED": {
+				"searchBy": "cssSelector",
+				"searchTerms": ".article__title-link"
+			},
+			"titleElement_OPTIONAL": null,
+			"blacklistElements": null
+		}
+	],
+	"websites": [
+		{
+			"name": "InsideEVs",
+			"url": "https://insideevs.com/news/",
+			"refreshInterval": 60000,
+			"containerElement": {
+				"searchBy": "className",
+				"searchTerms": "browse-grid"
+			},
+			"singlePostElement": {
+				"searchBy": "className",
+				"searchTerms": "wcom"
+			},
+			"urlElement": {
+				"searchBy": "xpath",
+				"searchTerms": ".//h3/a"
+			},
+			"titleElement": {
+				"searchBy": "xpath",
+				"searchTerms": ".//h3/a"
+			},
+			"blacklistElements": null
+		}
+	]
+}

@@ -41,6 +41,6 @@ public class Main implements CommandLineRunner {
                 break;
         }
 
-        LOG.info("Main.run() is DONE");
+        LOG.debug("Main.run() is DONE");
     }
 }

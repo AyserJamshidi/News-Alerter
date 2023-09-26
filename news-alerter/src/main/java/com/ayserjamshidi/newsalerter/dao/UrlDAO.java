@@ -32,18 +32,16 @@ public class UrlDAO {
     public UrlDAO(ObjectMapper objectMapper) throws IOException {
         this.objectMapper = objectMapper;
 
-        if (DEBUG) {
-            newsAlerterFile = new File("/Users/ace/IdeaProjects/News-Alerter/news-alerter/src/main/resources/configs/" + FILE_NAME);
-        } else {
-            newsAlerterFile = FileUtil.getConfigFile(FILE_NAME);
-        }
+        File tempFile = FileUtil.getConfigFile(FILE_NAME);
 
-        if (!newsAlerterFile.exists()) {
+        if (tempFile == null) {
             LOG.error("Could not find database file '{}/{}', creating an empty one.", System.getProperty("user.dir"), FILE_NAME);
 
+            newsAlerterFile = FileUtil.getOrCreateConfigFile(FILE_NAME);
             storedUrls = new HashSet<>();
             writeToFile();
         } else {
+            newsAlerterFile = tempFile;
             storedUrls = objectMapper.readValue(newsAlerterFile, HashSet.class);
         }
     }

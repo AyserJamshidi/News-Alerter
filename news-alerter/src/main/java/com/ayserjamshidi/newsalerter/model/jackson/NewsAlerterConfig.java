@@ -17,6 +17,9 @@ public class NewsAlerterConfig {
     @JsonProperty("headless")
     Boolean headless;
 
+    @JsonProperty("ignoreFirstRunOutput")
+    Boolean ignoreFirstRunOutput;
+
     @JsonProperty("websites")
     WebsiteEntry[] websiteEntries;
 }

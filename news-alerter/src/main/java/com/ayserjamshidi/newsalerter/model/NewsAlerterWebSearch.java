@@ -1,8 +1,9 @@
 package com.ayserjamshidi.newsalerter.model;
 
 import com.ayserjamshidi.newsalerter.WebsiteEntry;
+import com.ayserjamshidi.newsalerter.model.jackson.NewsElementDetails;
 import com.ayserjamshidi.newsalerter.service.NewsSvc;
-import org.openqa.selenium.By;
+import com.ayserjamshidi.util.SeleniumUtil;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,12 @@ public class NewsAlerterWebSearch extends SimpleWebSearch {
     private final NewsSvc newsSvc;
 
     // NewsAlerter Specific
-    private WebsiteEntry websiteEntry;
+//    private WebsiteEntry websiteEntry;
+    private NewsElementDetails containerDetails;
+    private NewsElementDetails singlePostDetails;
+    private NewsElementDetails urlDetails;
+    private NewsElementDetails titleDetails;
+    private boolean ignoreFirstRunOutput = false;
 
     @Autowired
     public NewsAlerterWebSearch(NewsSvc newsSvc) {
@@ -32,13 +38,19 @@ public class NewsAlerterWebSearch extends SimpleWebSearch {
         this.newsSvc = newsSvc;
     }
 
-    public void initialize(WebsiteEntry websiteEntry, boolean headless) {
+    public void initialize(WebsiteEntry websiteEntry, boolean ignoreFirstRunOutput, boolean headless) {
         super.initialize(headless);
         super.setName(websiteEntry.getName());
 
-        this.websiteEntry = websiteEntry;
+//        this.websiteEntry = websiteEntry;
         super.websiteUrl = websiteEntry.getUrl();
         super.refreshInterval = websiteEntry.getRefreshInterval();
+
+        this.containerDetails = websiteEntry.getContainerElement();
+        this.singlePostDetails = websiteEntry.getSinglePostElement();
+        this.urlDetails = websiteEntry.getUrlElement();
+        this.titleDetails = websiteEntry.getTitleElement();
+        this.ignoreFirstRunOutput = ignoreFirstRunOutput;
 
         LOG.info("Initialized {}", super.getName());
     }
@@ -46,34 +58,31 @@ public class NewsAlerterWebSearch extends SimpleWebSearch {
     public void stepsInBetween() {
         List<String> addedUrls = new ArrayList<>();
 
-        for (WebElement webElement : driver.findElements(By.className(websiteEntry.getContainerElement()))) {
+        for (WebElement containerElement : driver.findElements(SeleniumUtil.getBy(containerDetails.getSearchBy(), containerDetails.getSearchTerms()))) {
 
-            for (WebElement currentItem : webElement.findElements(By.className(websiteEntry.getEntryElement()))) {
-                List<String> outputString = new ArrayList<>();
+            for (WebElement currentPost : containerElement.findElements(SeleniumUtil.getBy(singlePostDetails.getSearchBy(), singlePostDetails.getSearchTerms()))) {
+                StringBuilder outputString = new StringBuilder();
+                WebElement urlElement = findElementOrNull(currentPost, SeleniumUtil.getBy(urlDetails.getSearchBy(), urlDetails.getSearchTerms()));
+                WebElement titleElement = titleDetails != null ? findElementOrNull(currentPost, SeleniumUtil.getBy(titleDetails.getSearchBy(), titleDetails.getSearchTerms())) : null;
 
-                WebElement titleElement = findElementOrNull(currentItem, By.cssSelector(websiteEntry.getCssSelector()));
-
-                if (titleElement == null) {
-                    LOG.warn("Element not found: {}", websiteEntry.getCssSelector());
+                if (urlElement == null) {
+                    LOG.error("Failed to acquire URL element for '{}'", this.getName());
                     continue;
                 }
 
-                String newsUrl = titleElement.getAttribute("href");
+                String newsUrlText = urlElement.getAttribute("href");
+                String titleText = titleElement != null ? titleElement.getText() : null;
 
-                if (newsUrl.isEmpty() || newsSvc.contains(newsUrl))
+                if (newsUrlText.isEmpty() || newsSvc.contains(newsUrlText))
                     continue;
 
-                outputString.add(titleElement.getText());
+                addedUrls.add(newsUrlText);
 
-                if (newsSvc.contains(newsUrl)) {
-                    LOG.info("Already contain {}", newsUrl);
-                    continue;
+                if (titleText != null && !titleText.isEmpty()) {
+                    outputString.append(titleText).append(' ');
                 }
-
-                outputString.add(newsUrl);
-                addedUrls.add(newsUrl);
-
-                LOG.info("{}", outputString);
+                outputString.append(newsUrlText);
+                LOG.info(outputString.toString());
             }
         }
 
@@ -81,7 +90,7 @@ public class NewsAlerterWebSearch extends SimpleWebSearch {
             return;
         }
 
-        LOG.info("Adding {} urls to the database.", addedUrls.size());
+        LOG.debug("Adding {} urls to the database.", addedUrls.size());
         newsSvc.add(addedUrls);
     }
 }
